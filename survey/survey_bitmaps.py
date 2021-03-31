@@ -85,7 +85,8 @@ def run():
                   (png, md5hex, avg[0], avg[1], avg[2],
                    mode[0], mode[1], mode[2], transparency, ncolors))
         image_pk = c.lastrowid
-        for _color in color_list:
-            c.execute("INSERT INTO image_colors (image, color) VALUES (?,?)",
-                      (image_pk, _color[1]))
-        conn.commit()
+        if not transparency:
+            for _color in color_list:
+                c.execute("INSERT INTO image_colors (image, color) VALUES (?,?)",
+                          (image_pk, _color[1]))
+            conn.commit()
