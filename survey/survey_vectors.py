@@ -22,8 +22,9 @@ def run():
                 and os.path.isfile(f"/media/flagscraper/svg/{_f}")]:
         count +=1
         print(f"Processing file {count} | {svg}")
-        with open(f"/media/flagscraper/svg/{svg}", "rb") as _f:
-            md5hex = md5(_f).hexdigest()
+        with open(f"/media/flagscraper/svg/{svg}") as _f:
+            data = _f.read()
+        md5hex = md5(data.encode()).hexdigest()
         ncolors = len(vg.colors(f"/media/flagscraper/svg/{svg}"))
         c.execute("INSERT INTO pngs (fname, md5, ncolors) VALUES (?,?,?)",
                                     (svg, md5hex, ncolors))
