@@ -48,23 +48,27 @@ def run():
         transparency = 0 if avg[3] == 255 else 1
         avg = [round(a) for a in avg]
         if not transparency:
-            color_list = []
-            for px in pixels:
-                color = "#{:02x}{:02x}{:02x}{:02x}"\
-                         .format(px[0], px[1], px[2], 255)
-                if color not in color_list:
-                    color_list.append(color)
-            ncolors = len(color_list)
-            for _i, _color in enumerate(color_list):
-                c.execute("SELECT rowid FROM colors WHERE rgba32=?",
-                          (_color,))
-                color_pk = c.fetchone()
-                if not color_pk:
-                    c.execute("INSERT INTO colors (rgba32) VALUES (?)",
+            color_tuples = image.getcolors()
+            if not color_tuples:
+                ncolors = 0 # Zero colors = Over 256 colors
+            else:
+                color_list = []
+                for _c in image.getcolors():
+                    rgba32 = "#{:02x}{:02x}{:02x}{:02x}"\
+                             .format(_c[1][0], _c[1][1], _c[1][2], 255)
+                    if rgba32 not in color_list:
+                        color_list.append(rgba32)
+                ncolors = len(color_list)
+                for _i, _color in enumerate(color_list):
+                    c.execute("SELECT rowid FROM colors WHERE rgba32=?",
                               (_color,))
-                    conn.commit()
-                    color_pk = c.lastrowid
-                color_list[_i] = (_color, color_pk)
+                    color_pk = c.fetchone()
+                    if not color_pk:
+                        c.execute("INSERT INTO colors (rgba32) VALUES (?)",
+                                  (_color,))
+                        conn.commit()
+                        color_pk = c.lastrowid
+                    color_list[_i] = (_color, color_pk)
         if not md5hex and avg and mode and transparency and ncolors:
             print(f"Error surveying {image}.")
             image.save(f"./sorted/failure/{png}")
