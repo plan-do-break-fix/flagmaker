@@ -73,9 +73,9 @@ def run():
             print(f"Error surveying {image}.")
             image.save(f"/media/flagscraper/png/sorted/failure/{png}")
             break
-        image.save("/media/flagscraper/png/sorted-128/png/{png}") \
+        image.save(f"/media/flagscraper/png/sorted-128/png/{png}") \
             if not transparency \
-            else image.save("/media/flagscraper/png/sorted-128/transparency/{png}")
+            else image.save(f"/media/flagscraper/png/sorted-128/transparency/{png}")
         c.execute("INSERT INTO pngs "
                   "  (fname, md5,"
                   "   meanR, meanB, meanG, "
