@@ -84,6 +84,7 @@ def run():
                   "  VALUES (?,?,?,?,?,?,?,?,?,?)",
                   (png, md5hex, avg[0], avg[1], avg[2],
                    mode[0], mode[1], mode[2], transparency, ncolors))
+        conn.commit()
         image_pk = c.lastrowid
         if not transparency:
             for _color in color_list:
