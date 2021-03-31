@@ -47,12 +47,12 @@ def run():
         mode = bmp.composite_mode(pixels)      
         transparency = 0 if avg[3] == 255 else 1
         avg = [round(a) for a in avg]
+        color_list = []
         if not transparency:
             color_tuples = image.getcolors()
             if not color_tuples:
                 ncolors = 0 # Zero colors = Over 256 colors
             else:
-                color_list = []
                 for _c in image.getcolors():
                     rgba32 = "#{:02x}{:02x}{:02x}{:02x}"\
                              .format(_c[1][0], _c[1][1], _c[1][2], 255)
