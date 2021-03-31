@@ -86,7 +86,7 @@ def run():
                    mode[0], mode[1], mode[2], transparency, ncolors))
         conn.commit()
         image_pk = c.lastrowid
-        if not transparency:
+        if color_list:
             for _color in color_list:
                 c.execute("INSERT INTO image_colors (image, color) VALUES (?,?)",
                           (image_pk, _color[1]))
