@@ -2,8 +2,6 @@ from hashlib import md5
 from PIL import Image
 import os, sqlite3
 
-import Bitmap as bmp
-
 
 def run():
     print("Surveying bitmaps...")
@@ -42,34 +40,9 @@ def run():
         print(f"Processing file {count} | {png}")
         image = Image.open(f"/media/flagscraper/png/128/{png}").convert("RGBA")
         md5hex = md5(image.tobytes()).hexdigest()
-        pixels = image.getdata()
-        avg = bmp.composite_mean(pixels)
-        mode = bmp.composite_mode(pixels)      
-        transparency = 0 if avg[3] == 255 else 1
-        avg = [round(a) for a in avg]
-        color_list = []
-        if not transparency:
-            color_tuples = image.getcolors()
-            if not color_tuples:
-                ncolors = 0 # Zero colors = Over 256 colors
-            else:
-                for _c in image.getcolors():
-                    rgba32 = "#{:02x}{:02x}{:02x}{:02x}"\
-                             .format(_c[1][0], _c[1][1], _c[1][2], 255)
-                    if rgba32 not in color_list:
-                        color_list.append(rgba32)
-                ncolors = len(color_list)
-                for _i, _color in enumerate(color_list):
-                    c.execute("SELECT rowid FROM colors WHERE rgba32=?",
-                              (_color,))
-                    color_pk = c.fetchone()
-                    if not color_pk:
-                        c.execute("INSERT INTO colors (rgba32) VALUES (?)",
-                                  (_color,))
-                        conn.commit()
-                        color_pk = c.lastrowid
-                    color_list[_i] = (_color, color_pk)
-        if not md5hex and avg and mode and transparency and ncolors:
+        mean_alpha = sum([i[3] for i in image.getdata()])/len(image.getdata())
+        transparency = 0 if mean_alpha == 255 else 1
+        if not md5hex and transparency:
             print(f"Error surveying {image}.")
             image.save(f"/media/flagscraper/png/sorted/failure/{png}")
             break
@@ -77,17 +50,7 @@ def run():
             if not transparency \
             else image.save(f"/media/flagscraper/png/sorted-128/transparency/{png}")
         c.execute("INSERT INTO pngs "
-                  "  (fname, md5,"
-                  "   meanR, meanB, meanG, "
-                  "   modeR, modeB, modeG, "
-                  "   transparency, ncolors)"
-                  "  VALUES (?,?,?,?,?,?,?,?,?,?)",
-                  (png, md5hex, avg[0], avg[1], avg[2],
-                   mode[0], mode[1], mode[2], transparency, ncolors))
+                  "  (fname, md5, transparency)"
+                  "  VALUES (?,?,?)",
+                  (png, md5hex, transparency))
         conn.commit()
-        image_pk = c.lastrowid
-        if color_list:
-            for _color in color_list:
-                c.execute("INSERT INTO image_colors (image, color) VALUES (?,?)",
-                          (image_pk, _color[1]))
-            conn.commit()
