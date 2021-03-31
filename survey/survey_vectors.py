@@ -6,7 +6,7 @@ import Vector as vg
 
 def run():
     print("Surveying vector graphics...")
-    conn = sqlite3.connect(f"survey.sqlite3.db")
+    conn = sqlite3.connect(f"/media/flagscraper/survey.sqlite3.db")
     c = conn.cursor()
     c.execute("CREATE TABLE IF NOT EXISTS 'svgs' ("
               "  fname TEXT NOT NULL,"

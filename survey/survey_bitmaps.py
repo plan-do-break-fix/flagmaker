@@ -7,7 +7,7 @@ import Bitmap as bmp
 
 def run():
     print("Surveying bitmaps...")
-    conn = sqlite3.connect(f"survey.sqlite3.db")
+    conn = sqlite3.connect(f"/media/flagscraper/survey.sqlite3.db")
     c = conn.cursor()
     c.execute("CREATE TABLE IF NOT EXISTS 'pngs' ("
               "  fname TEXT NOT NULL,"
@@ -71,11 +71,11 @@ def run():
                     color_list[_i] = (_color, color_pk)
         if not md5hex and avg and mode and transparency and ncolors:
             print(f"Error surveying {image}.")
-            image.save(f"./sorted/failure/{png}")
+            image.save(f"/media/flagscraper/png/sorted/failure/{png}")
             break
-        image.save("./sorted-128/png/{png}") \
+        image.save("/media/flagscraper/png/sorted-128/png/{png}") \
             if not transparency \
-            else image.save("./sorted-128/transparency/{png}")
+            else image.save("/media/flagscraper/png/sorted-128/transparency/{png}")
         c.execute("INSERT INTO pngs "
                   "  (fname, md5,"
                   "   meanR, meanB, meanG, "
