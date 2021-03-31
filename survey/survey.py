@@ -1,5 +1,5 @@
 
-import rasterize
+from rasterize import rasterize
 from survey import survey_bitmaps
 from survey import survey_vectors
 
