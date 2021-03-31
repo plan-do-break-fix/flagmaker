@@ -42,7 +42,7 @@ def run():
         print(f"Processing file {count} | {png}")
         image = Image.open(f"/media/flagscraper/png/128/{png}")
         md5hex = md5(image.tobytes()).hexdigest()
-        pixels = bmp.all_pixels(image)
+        pixels = image.getdata()
         avg = bmp.composite_mean(pixels)
         mode = bmp.composite_mode(pixels)      
         transparency = 0 if avg[3] == 255 else 1

@@ -9,13 +9,6 @@ def basename(fname):
     return fname
 
 
-def all_pixels(image: Image):
-    """Return all image pixels as an array of RGBA tuples."""
-    return [image.getpixel((i,j))
-            for j in range(0,image.height)
-            for i in range(0,image.width)]
-
-
 def composite_mean(pixels: List[Tuple[int]]) -> List[int]:
     totals = [sum([px[i] for px in pixels]) for i in range(0,4)]
     return [total/len(pixels) for total in totals]
