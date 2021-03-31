@@ -20,8 +20,8 @@ def rasterize(path_in, path_out, ext="png", width=None, height=None):
         fpath_out = f"{path_out}/{svg[:-4]}.{ext}"
         with Image(filename=fpath_in) as image:
             image.format = ext
-        if not _w == image.size[0] or _h == image.size[1]:
-            image.resize(_w, _h)
-        image.save(filename=fpath_out)
+            if not _w == image.size[0] or _h == image.size[1]:
+                image.resize(_w, _h)
+            image.save(filename=fpath_out)
         print(f"{count}/{len(svg_files)} | {path_out}/{svg[:-4]}.{ext} "\
               "written to disk")
