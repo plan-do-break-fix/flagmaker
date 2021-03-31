@@ -9,14 +9,7 @@ def run():
     c = conn.cursor()
     c.execute("CREATE TABLE IF NOT EXISTS 'pngs' ("
               "  fname TEXT NOT NULL,"
-              "  meanR INTEGER NOT NULL,"
-              "  meanB INTEGER NOT NULL,"
-              "  meanG INTEGER NOT NULL,"
-              "  modeR INTEGER NOT NULL,"
-              "  modeB INTEGER NOT NULL,"
-              "  modeG INTEGER NOT NULL,"
               "  transparency INTEGER NOT NULL,"
-              "  ncolors INTEGER NOT NULL,"
               "  md5 TEXT NOT NULL"
               ");"
     )
