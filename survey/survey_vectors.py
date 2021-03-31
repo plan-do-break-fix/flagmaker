@@ -26,6 +26,6 @@ def run():
             data = _f.read()
         md5hex = md5(data.encode()).hexdigest()
         ncolors = len(vg.colors(f"/media/flagscraper/svg/{svg}"))
-        c.execute("INSERT INTO pngs (fname, md5, ncolors) VALUES (?,?,?)",
+        c.execute("INSERT INTO svgs (fname, md5, ncolors) VALUES (?,?,?)",
                                     (svg, md5hex, ncolors))
         conn.commit()
