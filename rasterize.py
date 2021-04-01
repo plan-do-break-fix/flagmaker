@@ -1,5 +1,6 @@
 import os, shutil
 from PIL import Image
+from wand.color import Color
 from wand.image import Image
 from wand.exceptions import ImageError
 
@@ -21,9 +22,10 @@ def rasterize(path_in, path_out, ext="png", width=None, height=None):
             _w = width if width else size[0]
             _h = height if height else size[1]
             try:
-                with Image(filename=fpath_in) as image:
-                    image.format = ext
-                    if not _w == image.size[0] or _h == image.size[1]:
+                with Image(filename=fpath_in,
+                           background=Color("transparent")
+                           ) as image:
+                    if _w != image.size[0] or _h != image.size[1]:
                         image.resize(_w, _h)
                     image.save(filename=fpath_out)
             except ImageError:
