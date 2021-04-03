@@ -1,4 +1,5 @@
 #!/bin/python3
+#batch.rasterize v1.0
 import os, shutil
 from wand.color import Color
 from wand.image import Image, IMAGE_TYPES
