@@ -10,7 +10,7 @@ def rasterize(path_in, path_out,
               preserve_alpha=True,
               background="white",
               quantize=0,
-              writesafe=True
+              write_safe=True
               ) -> None:
     """
     Wrapper wrapper for consistent, repeatable batch rasterization operations.
@@ -24,15 +24,15 @@ def rasterize(path_in, path_out,
     :param preserve_alpha: allow transparent pixels in output (default True)
     :param background: color to use for transparent pixels (default 'white')
     :param quantize: if > 0, number of colors to restrict output to (default 0)
-    :param writesafe: if True, will not write over existing files (default True)
+    :param write_safe: if True, will not write over existing files (default True)
     :returns None: inteded for batch processing; output is image files
     :raises RuntimeError: Raised if non-existent Image Type argument passed
     :raises ImageError: Raises ImageError returned by MagickWand
     """
     os.mkdir(path_out) if not os.path.isdir(path_out) else None
-    os.mkdir(f"{path_in}/bad-raster/") \
-        if not os.path.isdir(f"{path_in}/bad-raster/") else None
-    if imgtype not in IMAGE_TYPES:
+    os.mkdir(f"{path_in}/bad_raster/") \
+        if not os.path.isdir(f"{path_in}/bad_raster/") else None
+    if image_type not in IMAGE_TYPES:
         print(f"{imgtype} is not a recognized ImageMagick Image Type.")
         raise RuntimeError
     svg_files = [f for f in os.listdir(path_in)
@@ -42,7 +42,7 @@ def rasterize(path_in, path_out,
     for svg in svg_files:
         count += 1
         fpath_out = f"{path_out}/{svg[:-4]}.{ext}"
-        if writesafe and os.path.isfile(fpath_out):
+        if write_safe and os.path.isfile(fpath_out):
             print(f"File {count}/{len(svg_files)} already exists.")
             break
         fpath_in = f"{path_in}/{svg}"
@@ -64,6 +64,6 @@ def rasterize(path_in, path_out,
                     image.close()
         except ImageError:
             print(f"Unable to rasterize {svg}")
-            shutil.move(fpath_in, f"{path_in}/failed-rasterization/")
+            shutil.move(fpath_in, f"{path_in}/bad_raster/")
         print(f"{count}/{len(svg_files)} {path_out}/{svg[:-4]}.{ext} "\
               "written to disk")
