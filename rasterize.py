@@ -1,3 +1,4 @@
+#!/bin/python3
 import os, shutil
 from wand.color import Color
 from wand.image import Image, IMAGE_TYPES
@@ -23,15 +24,13 @@ def rasterize(path_in, path_out,
     :param image_type: ImageMagick image type (default 'truecolor')
     :param preserve_alpha: allow transparent pixels in output (default True)
     :param background: color to use for transparent pixels (default 'white')
-    :param quantize: if > 0, number of colors to restrict output to (default 0)
-    :param write_safe: if True, will not write over existing files (default True)
+    :param quantize: number of colors to quantize output to if not 0 (default 0)
+    :param write_safe: do not write over existing files (default True)
     :returns None: inteded for batch processing; output is image files
-    :raises RuntimeError: Raised if non-existent Image Type argument passed
-    :raises ImageError: Raises ImageError returned by MagickWand
+    :raises RuntimeError: if non-existent Image Type passed as image_type
+    :raises ImageError: if ImageError returned by MagickWand
     """
     os.mkdir(path_out) if not os.path.isdir(path_out) else None
-    os.mkdir(f"{path_in}/bad_raster/") \
-        if not os.path.isdir(f"{path_in}/bad_raster/") else None
     if image_type not in IMAGE_TYPES:
         print(f"{imgtype} is not a recognized ImageMagick Image Type.")
         raise RuntimeError
@@ -63,7 +62,9 @@ def rasterize(path_in, path_out,
                     image.save(filename=fpath_out)
                     image.close()
         except ImageError:
-            print(f"Unable to rasterize {svg}")
+            os.mkdir(f"{path_in}/bad_raster/") \
+                    if not os.path.isdir(f"{path_in}/bad_raster/") else None
+            print(f"Unable to rasterize {count}/{len(svg_files)} {svg}")
             shutil.move(fpath_in, f"{path_in}/bad_raster/")
         print(f"{count}/{len(svg_files)} {path_out}/{svg[:-4]}.{ext} "\
               "written to disk")
