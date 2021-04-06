@@ -5,6 +5,7 @@ from survey.survey import survey
 class AbstractPipeline:
 
     def __init__(self, datapath="/media/flagmaker"):
+        self.datapath = datapath
         self.input = ""
         self.output = ""
         self.to_process = []
