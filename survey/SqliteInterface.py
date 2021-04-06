@@ -1,7 +1,7 @@
 import sqlite3
 
 BITMAP_SCHEMA = [
-    "CREATE TABLE IS NOT EXISTS 'images' ("
+    "CREATE TABLE IF NOT EXISTS 'images' ("
     "  fname        TEXT    NOT NULL,"
     "  transparency INTEGER NOT NULL,"
     "  md5          TEXT    NOT NULL"
