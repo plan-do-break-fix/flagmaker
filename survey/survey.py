@@ -1,27 +1,31 @@
 import hashlib, os
 
-import survey.bitmap, filters.bitmap
-import survey.vector
+import survey.bitmap as bitmap_survey 
+import filters.bitmap as bitmap_filters
+import survey.vector as vector_survey
 from survey import SqliteInterface
 
-def survey(dataset: str, datapath="/media/flagmaker/"):
+def survey(dataset: str, datapath="/media/flagmaker"):
     path = f"{datapath}/imagesets/{dataset}"
+    print(path)
     db = SqliteInterface.Interface(dataset)
-    ftypes = get_ftypes(path)    
+    ftypes = get_ftypes(path)
+    print(f"Found {ftypes[0]} files.")    
     if len(ftypes) > 1:
         print("I have not been programmed to do that.")
         return False
     for image in [f for f in os.listdir(path)
-                  if os.path.isfile(f) and f.endswith(ftypes[0])]:
-        with open(image) as _f:
-            md5hash = md5(_f).hexdigest()
+                  if os.path.isfile(f"{path}/{f}") and f.endswith(ftypes[0])]:
+        fpath = f"{path}/{image}"
+        with open(fpath) as _f:
+            md5hash = hashlib.md5(_f.read().encode()).hexdigest()
         if ftypes[0] in ["bmp", "png", "jpg"]:
-            transparency = int(filters.bitmap.no_transparency(path))
-            db.record_bitmap(fname, transparency, md5hash)
+            transparency = int(bitmap_filters.no_transparency(path))
+            db.record_bitmap(image, transparency, md5hash)
         elif ftypes[0] == "svg":
-            colors = survey.vector.colors(path)
+            colors = vector_survey.colors(fpath)
             ncolors = len(colors)
-            db.record_svg(fname, ncolors, md5hash, colors)
+            db.record_svg(image, ncolors, md5hash, colors)
     
 
 
