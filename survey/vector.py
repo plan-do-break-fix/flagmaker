@@ -17,7 +17,7 @@ def size(root: Element) -> Tuple[int]:
 
 def colors(fpath: str) -> List[str]:
     """
-    Return list of all colors used in file."""
+    Return list of all colors declared in svg xml."""
     with open(fpath) as _f:
         svg = _f.read()
     colors = list(set(re.findall('#[0-9a-fA-F]{3,6}', svg)))
