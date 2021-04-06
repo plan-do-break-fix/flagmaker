@@ -28,7 +28,7 @@ def rasterize(fpath_in, path_out,
     :raises RuntimeError: if write safety would be violated
     :raises ImageError: if ImageError is returned by MagickWand
     """
-    fpath_out = f"{path_out}/{fpath_in.split("/")[-1][:-4]}.{ext}"
+    fpath_out = f"{path_out}/{fpath_in.split('/')[-1][:-4]}.{ext}"
     if write_safe and os.path.isfile(fpath_out):
         raise RuntimeError
     try:
