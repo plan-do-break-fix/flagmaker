@@ -11,8 +11,8 @@ class AbstractPipeline:
         self.to_process = []
 
     def run(self) -> None:
-        if os.path.isdir(f"{datapath}/{output_name}") \
-                   or os.path.isfile(f"{datapath}/{output_name}.tar"):
+        if os.path.isdir(f"{self.datapath}/{output_name}") \
+                   or os.path.isfile(f"{self.datapath}/{output_name}.tar"):
             print(f"Data set named {self.output} already exists.")
             return False
         self.load_data_set()
@@ -21,7 +21,7 @@ class AbstractPipeline:
 
     def load_data_set(self) -> bool:
         """Populates Pipeline.to_process with image file paths."""
-        _path = f"{datapath}/{input_name}"
+        _path = f"{self.datapath}/{input_name}"
         if not os.path.isdir(_path):
             if not os.path.isfile(f"{_path}.tar"):
                 raise RuntimeError
