@@ -9,5 +9,5 @@ def channel_mean(fpath: str, channel: str) -> float:
         with image.convert("RGBA") as rgba:
             index = _lookup[channel.lower()]
             return (sum([i[index] for i in rgba.getdata()])
-                    /len(rgba.getdata())
+                    /len(rgba.getdata()))
 

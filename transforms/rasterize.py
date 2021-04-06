@@ -7,7 +7,7 @@ from wand.exceptions import ImageError
 
 
 def rasterize(fpath_in, path_out,
-              width=None, height=None,
+              width, height,
               ext="png",
               preserve_alpha=True,
               background="white",
@@ -18,30 +18,29 @@ def rasterize(fpath_in, path_out,
 
     :param fpath_in: path of svg to rasterize
     :param path_out: directory for rasterized image
-    :param width: width in pixels if output image is to be scaled horizontally
-    :param height: height in pixels if output image is to be scaled vertically 
+    :param width: desired width in pixels of output image
+    :param height: desired height in pixels of output image 
     :param ext: file format for output (default 'png')
     :param preserve_alpha: allow transparent pixels in output (default True)
-    :param background: color to use for transparent pixels (default 'white')
-    :param write_safe: do not write over existing files (default True)
-    :returns None: output is image file
-    :raises RuntimeError: if write safety enabled and output file exists
-    :raises ImageError: if ImageError returned by MagickWand
+    :param background: used when not preserving alpha (default 'white')
+    :param write_safe: will not write over existing files (default True)
+    :returns None: output is rasterized image file
+    :raises RuntimeError: if write safety would be violated
+    :raises ImageError: if ImageError is returned by MagickWand
     """
     fpath_out = f"{path_out}/{fpath_in.split("/")[-1][:-4]}.{ext}"
     if write_safe and os.path.isfile(fpath_out):
         raise RuntimeError
     try:
-        with Image(filename=fpath_in) as image:
-            image.background_color = "transparent" if preserve_alpha \
-                                        else background
-            if width != image.size[0] or height != image.size[1]:
-                image.resize(width, height)
-            image.save(filename=fpath_out)
-            image.close()
-        if quantize or image_type != "truecolor":
-            with Image(filename=fpath_out) as image:
+        with Image(filename=fpath_in) as original:
+            with original.convert(ext) as converted:
+                converted.resize(width, height)
+                if preserve_alpha:
+                    converted.background_color = "transparent"
+                else:
+                    converted.background_color = background
+                    converted.alpha_channel = "deactivate"
+                converted.save(filename=fpath_out)
     except ImageError:
-        print(f"Unable to rasterize {svg}")
-    print(f"{count}/{len(svg_files)} {path_out}/{svg[:-4]}.{ext} "\
-            "written to disk")
+        print(f"Unable to rasterize {svg}.")
+    print(f"{fpath_out} written to disk.")
