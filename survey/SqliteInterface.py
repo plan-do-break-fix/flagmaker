@@ -33,9 +33,7 @@ class Interface:
         self.conn = sqlite3.connect(f"{datapath}/surveys/{dataset}.sqlite3.db")
         self.c = self.conn.cursor()
         ftype = dataset.split("-")[1].split(".")[0]
-        tables = SVG_SCHEMA + SCHEMA \
-                 if ftype == "svg" \
-                 else BITMAP_SCHEMA + SCHEMA
+        tables = SVG_SCHEMA if ftype == "svg" else BITMAP_SCHEMA
         map(self.c.execute, tables)
         self.conn.commit()
 
