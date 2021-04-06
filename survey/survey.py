@@ -17,8 +17,8 @@ def survey(dataset: str, datapath="/media/flagmaker"):
     for image in [f for f in os.listdir(path)
                   if os.path.isfile(f"{path}/{f}") and f.endswith(ftypes[0])]:
         fpath = f"{path}/{image}"
-        with open(fpath) as _f:
-            md5hash = hashlib.md5(_f.read().encode()).hexdigest()
+        with open(fpath, "rb") as _f:
+            md5hash = hashlib.md5(_f.read()).hexdigest()
         if ftypes[0] in ["bmp", "png", "jpg"]:
             transparency = int(bitmap_filters.no_transparency(path))
             db.record_bitmap(image, transparency, md5hash)
