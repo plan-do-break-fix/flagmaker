@@ -2,7 +2,7 @@ import hashlib, os
 
 import survey.bitmap, filters.bitmap
 import survey.vector
-import SqliteInterface
+import survey.SqliteInterface
 
 def survey(dataset: str, datapath="/media/flagmaker/"):
     path = f"{datapath}/imagesets/{dataset}"
