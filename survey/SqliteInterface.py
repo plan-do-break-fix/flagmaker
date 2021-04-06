@@ -34,7 +34,8 @@ class Interface:
         self.c = self.conn.cursor()
         ftype = dataset.split("-")[1].split(".")[0]
         tables = SVG_SCHEMA if ftype == "svg" else BITMAP_SCHEMA
-        map(self.c.execute, tables)
+        for table in tables:        
+            self.c.execute(table)
         self.conn.commit()
 
     def record_bitmap(self, fname: str, transparency: int, md5: str) -> bool:
@@ -53,12 +54,12 @@ class Interface:
                        "VALUES (?,?,?)",
                        (fname, ncolors, md5))
         self.conn.commit()
-        img_pk = self.c.lastrowid
+        image_pk = self.c.lastrowid
         for color in colors:
             if self.color_exists(color):
                 print(f"Color {color} already exists.")
                 break
-            self.c.execute("INSERT INTO colors (color) VALUES (?)", (color,))
+            self.c.execute("INSERT INTO colors (rgba32) VALUES (?)", (color,))
             color_pk = self.c.lastrowid
             self.c.execute("INSERT INTO image_colors (image, color) "
                            "VALUES (?, ?)", (image_pk, color_pk))
@@ -70,7 +71,7 @@ class Interface:
         return True if self.c.fetchone() else False
 
     def color_exists(self, color: str) -> bool:
-        self.c.execute("SELECT rowid FROM colors WHERE color=?", (color,))
+        self.c.execute("SELECT rowid FROM colors WHERE rgba32=?", (color,))
         return True if self.c.fetchone() else False
 
         
