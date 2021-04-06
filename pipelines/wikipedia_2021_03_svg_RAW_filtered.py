@@ -8,9 +8,9 @@ from transforms.rasterize import rasterize
 class Pipeline(AbstractPipeline):
 
     def __init__(self, datapath="/media/flagmaker"):
-        super().__init__()
+        super().__init__(datapath="/media/flagmaker")
         self.input = "wikipedia.2021.03-svg.RAW"
-        self.output = "wikipedia.2021.03-svg.RAW:filtered"
+        self.output = "wikipedia.2021.03-png.survey:128"
 
     def process(self):
         os.makedirs(f"{datapath}/{self.output}")
