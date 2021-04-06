@@ -9,7 +9,7 @@ class Pipeline(AbstractPipeline):
 
     def __init__(self, datapath="/media/flagmaker"):
         super().__init__(datapath=datapath)
-        self.input = "wikipedia.2021.03-svg.RAW"
+        self.input = "wikipedia.2021.03-svg.raw"
         self.output = "wikipedia.2021.03-png.survey:128"
 
     def process(self):
@@ -20,7 +20,6 @@ class Pipeline(AbstractPipeline):
             rasterize(fpath_in=f"{self.datapath}/imagesets/{self.input}/{image}", 
                       path_out=f"{self.datapath}/imagesets/{self.output}",
                       width=128, height=64)
-        self.survey(self.output)
 
 
 
