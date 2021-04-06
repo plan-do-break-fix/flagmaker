@@ -20,7 +20,7 @@ def survey(dataset: str, datapath="/media/flagmaker"):
         with open(fpath, "rb") as _f:
             md5hash = hashlib.md5(_f.read()).hexdigest()
         if ftypes[0] in ["bmp", "png", "jpg"]:
-            transparency = int(bitmap_filters.no_transparency(path))
+            transparency = int(bitmap_filters.no_transparency(fpath))
             db.record_bitmap(image, transparency, md5hash)
         elif ftypes[0] == "svg":
             colors = vector_survey.colors(fpath)
