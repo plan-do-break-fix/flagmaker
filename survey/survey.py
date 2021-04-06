@@ -6,7 +6,7 @@ from survey import SqliteInterface
 
 def survey(dataset: str, datapath="/media/flagmaker/"):
     path = f"{datapath}/imagesets/{dataset}"
-    db = survey.SqliteInterface.Interface(dataset)
+    db = SqliteInterface.Interface(dataset)
     ftypes = get_ftypes(path)    
     if len(ftypes) > 1:
         print("I have not been programmed to do that.")
