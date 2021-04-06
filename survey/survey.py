@@ -2,11 +2,11 @@ import hashlib, os
 
 import survey.bitmap, filters.bitmap
 import survey.vector
-import survey.SqliteInterface
+from survey import SqliteInterface
 
 def survey(dataset: str, datapath="/media/flagmaker/"):
     path = f"{datapath}/imagesets/{dataset}"
-    db = SqliteInterface.Interface(dataset)
+    db = survey.SqliteInterface.Interface(dataset)
     ftypes = get_ftypes(path)    
     if len(ftypes) > 1:
         print("I have not been programmed to do that.")
