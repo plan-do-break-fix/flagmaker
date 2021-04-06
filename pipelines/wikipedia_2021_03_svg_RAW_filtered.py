@@ -13,12 +13,12 @@ class Pipeline(AbstractPipeline):
         self.output = "wikipedia.2021.03-png.survey:128"
 
     def process(self):
-        os.makedirs(f"{self.datapath}/{self.output}")
+        os.makedirs(f"{self.datapath}/imagesets/{self.output}")
         while self.to_process:
             image = self.to_process.pop()
             print(f"Processing {image}")
-            rasterize(fpath_in=f"{self.datapath}/{self.input}/{image}", 
-                      path_out=f"{self.datapath}/{self.output}",
+            rasterize(fpath_in=f"{self.datapath}/imagesets/{self.input}/{image}", 
+                      path_out=f"{self.datapath}/imagesets/{self.output}",
                       width=128, height=64)
         self.survey(self.output)
 
