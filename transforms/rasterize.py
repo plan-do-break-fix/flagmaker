@@ -32,15 +32,17 @@ def rasterize(fpath_in, path_out,
     if write_safe and os.path.isfile(fpath_out):
         raise RuntimeError
     try:
-        with Image(filename=fpath_in) as original:
-            with original.convert(ext) as converted:
-                converted.resize(width, height)
-                if preserve_alpha:
-                    converted.background_color = "transparent"
-                else:
+        if preserve_alpha:
+            with Image(filename=fpath_in, background="transparent") as image:
+                image.resize(width, height)
+                image.save(filename=fpath_out)
+        else:
+            with Image(filename=fpath_in) as image:
+                with original.convert(ext) as converted:
                     converted.background_color = background
                     converted.alpha_channel = "deactivate"
-                converted.save(filename=fpath_out)
+                    converted.save(filename=fpath_out)
+    
     except ImageError:
         print(f"Unable to rasterize {svg}.")
     print(f"{fpath_out} written to disk.")
