@@ -38,9 +38,10 @@ def rasterize(fpath_in, path_out,
                 image.save(filename=fpath_out)
         else:
             with Image(filename=fpath_in) as image:
-                with original.convert(ext) as converted:
+                with image.convert(ext) as converted:
                     converted.background_color = background
                     converted.alpha_channel = "deactivate"
+                    converted.resize(width, height)
                     converted.save(filename=fpath_out)
     
     except ImageError:
