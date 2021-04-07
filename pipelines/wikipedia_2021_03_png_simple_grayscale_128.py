@@ -21,15 +21,14 @@ class Pipeline(AbstractPipeline):
         while self.to_process:
             image = self.to_process.pop()
             print(f"Processing {image}")
-            if not self.png_db.get_transparency(image):
-                ncolors = self.svg_db.get_ncolors(image)
-                if ncolors < 6:
-                    rasterize(fpath_in=f"{self.datapath}/imagesets/{self.input}/{image}", 
-                            path_out=f"{self.datapath}/imagesets/{self.output}",
-                            width=128, height=64,
-                            preserve_alpha=False)
-                    color.image_type(fpath_in={self.datapath}/imagesets/{self.output},
-                                     path_out={self.datapath}/imagesets/{self.output},
-                                     image_type="grayscale",
-                                     quantize=ncolors,
-                                     write_safe=False) 
+            ncolors = self.svg_db.get_ncolors(image)
+            if ncolors < 6:
+                rasterize(fpath_in=f"{self.datapath}/imagesets/{self.input}/{image}", 
+                        path_out=f"{self.datapath}/imagesets/{self.output}",
+                        width=128, height=64,
+                        preserve_alpha=False)
+                color.image_type(fpath_in=f"{self.datapath}/imagesets/{self.output}/{'.'.join(image.split('.')[:-1])}.png",
+                                 path_out=f"{self.datapath}/imagesets/{self.output}",
+                                 image_type="grayscale",
+                                 quantize=ncolors,
+                                 write_safe=False) 
