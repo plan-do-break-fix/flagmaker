@@ -74,4 +74,17 @@ class Interface:
         self.c.execute("SELECT rowid FROM colors WHERE rgba32=?", (color,))
         return True if self.c.fetchone() else False
 
-        
+    def get_transparency(self, fname: str) -> bool:
+        if fname.endswith("svg"):
+            raise RuntimeError
+        self.c.execute("SELECT transparency FROM images WHERE fname=?",
+                       (fname,))
+        return True if self.c.fetchone() else False
+
+    def get_ncolors(self, fname: str) -> int:
+        if not fname.endswith("svg"):
+            raise RuntimeError
+        self.c.execute("SELECT ncolors FROM images WHERE fname=?",
+                       (fname,))
+        return self.c.fetchone()[0]
+
