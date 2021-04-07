@@ -26,7 +26,7 @@ def image_type(fpath_in, path_out,
     if image_type and image_type not in IMAGE_TYPES:
         print(f"{image_type} is not a recognized ImageMagick Image Type.")
         raise RuntimeError
-    fpath_out = f"{path_out}/{fpath_in.split("/")[-1][:-4]}.{ext}"
+    fpath_out = f"{path_out}/{fpath_in.split('/')[-1][:-4]}.{ext}"
     if write_safe and os.path.isfile(fpath_out):
         raise RuntimeError
     try:
